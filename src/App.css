@@ -1,116 +1,165 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+@import "tailwindcss";
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+body,
+html {
+  height: 100dvh;
+  width: 100dvw;
+  background: #0e1a26;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
 .container {
-  margin: 0;
-  padding-top: 10vh;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokemon-logo {
+  width: 80%;
+  max-width: 300px;
+  margin-bottom: 20px;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.page {
+  background: linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-content {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  padding: 20px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
+.cover {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  font-weight: bold;
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
-}
-
-.row {
+.pokemon-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 5px;
 }
 
-a {
+.pokemon-container img {
+  width: 70%;
+  max-height: 200px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.pokemon-container img:hover {
+  transform: scale(1.05);
+}
+
+.pokemon-info {
+  width: 100%;
+}
+
+.pokemon-name {
+  font-size: clamp(1rem, 3vw, 1.8rem);
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.pokemon-number {
+  font-size: clamp(0.7rem, 2vw, 1rem);
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+
+.pokemon-type {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: clamp(0.6rem, 1.5vw, 0.9rem);
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: white;
+  margin: 0 3px 5px 3px;
 }
 
-a:hover {
-  color: #535bf2;
+.type-electric {
+  background-color: #f1c40f;
 }
 
-h1 {
-  text-align: center;
+.type-ground {
+  background-color: #e67e22;
 }
 
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+.type-poison {
+  background-color: #9b59b6;
 }
 
-button {
-  cursor: pointer;
+.type-fire {
+  background-color: #e74c3c;
 }
 
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
+.type-flying {
+  background-color: #3498db;
 }
 
-input,
-button {
-  outline: none;
+.type-water {
+  background-color: #2980b9;
 }
 
-#greet-input {
-  margin-right: 5px;
+.type-dark {
+  background-color: #34495e;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
+.type-fighting {
+  background-color: #d35400;
+}
 
-  a:hover {
-    color: #24c8db;
-  }
+.type-steel {
+  background-color: #7f8c8d;
+}
 
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
-  button:active {
-    background-color: #0f0f0f69;
-  }
+.type-rock {
+  background-color: #9a7b4f;
+}
+
+.pokemon-description {
+  font-size: 14px;
+  color: #34495e;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.demoPage {
+  background: #fff;
+  color: #000;
 }
