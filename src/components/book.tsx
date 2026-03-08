@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
 
 function Book() {
-  const [test, settest] = useState("");
-  const [spellname, setspellname] = useState("");
-  const [spellcomponents, setspellcomponents] = useState("");
-  const [mana, setmana] = useState("");
-  const [school, setschool] = useState("");
+  const Spellbook = useRef<any>(null);
 
   const [spellnew, setspellnew] = useState({
     name: "",
@@ -43,6 +39,18 @@ function Book() {
     },
   ]);
 
+  useEffect(() => {
+    const savedspells = localStorage.getItem("savedspells")
+      ? JSON.parse(localStorage.getItem("savedspells") as string)
+      : [];
+
+    savedspells.splice(0, 3); // Remove the first 3 default spells to avoid duplication
+
+    setspelldata([...spelldata, ...savedspells]);
+
+    //setspelldata(savedspells ? JSON.parse(savedspells) : []);
+  }, []);
+
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     if (name === "Components") {
@@ -59,7 +67,11 @@ function Book() {
   };
 
   const addspell = () => {
+    const savedspells = [...spelldata, spellnew];
+
     setspelldata([...spelldata, spellnew]);
+
+    localStorage.setItem("savedspells", JSON.stringify(savedspells));
 
     setspellnew({
       name: "",
@@ -68,6 +80,34 @@ function Book() {
       SchoolSpell: "",
       description: "",
     });
+
+    setTimeout(() => {
+      if (Spellbook.current) {
+        Spellbook.current.pageFlip().flip(spelldata.length);
+      }
+    }, 100);
+  };
+
+  const deletespell = (index: number) => {
+    const updatedspells = [...spelldata];
+    updatedspells.splice(index, 1);
+    setspelldata(updatedspells);
+    localStorage.setItem("savedspells", JSON.stringify(updatedspells));
+
+    setTimeout(() => {
+      if (Spellbook.current) {
+        Spellbook.current.pageFlip().flip(spelldata.length - 1);
+      }
+    }, 100);
+
+    /*
+    old logic to force update the flipbook, but it caused some weird bugs and is no longer needed since we are using the key prop to force re-render when spell data changes
+    setTimeout(() => {
+      if (Spellbook.current) {
+        Spellbook.current.pageFlip().updateFromHtml();
+      }
+    }, 100);
+    */
   };
 
   /*
@@ -130,7 +170,8 @@ function Book() {
       </div>
 
       <HTMLFlipBook
-        key={spelldata.length} // Force re-render when spell data changes
+        key={spelldata.length}
+        ref={Spellbook} // Force re-render when spell data changes
         width={370}
         height={500}
         maxShadowOpacity={0.5}
@@ -145,8 +186,11 @@ function Book() {
           </div>
         </div>
 
-        {spelldata.map((spell) => (
-          <div className="bg-[url('/parchment.png')] bg-cover bg-center">
+        {spelldata.map((spell, index) => (
+          <div
+            key={index}
+            className="bg-[url('/parchment.png')] bg-cover bg-center"
+          >
             <div className="w-full h-full flex flex-col items-center justify-start gap-5">
               <div className="h-20 w-full" />
               <p className="text-xl font-bold">{spell.name}</p>
@@ -159,6 +203,12 @@ function Book() {
               <p className="text-lg text-center w-full leading-relaxed">
                 {spell.description}
               </p>
+              <button
+                onClick={() => deletespell(index)}
+                className="bg-gray-200 h-10 hover:scale-110 "
+              >
+                Delete Spell
+              </button>
             </div>
           </div>
         ))}
