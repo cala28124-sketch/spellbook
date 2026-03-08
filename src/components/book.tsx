@@ -2,9 +2,22 @@ import React, { useState, useEffect } from "react";
 import HTMLFlipBook from "react-pageflip";
 
 function Book() {
-  const spelldata = [
+  const [test, settest] = useState("");
+  const [spellname, setspellname] = useState("");
+  const [spellcomponents, setspellcomponents] = useState("");
+  const [mana, setmana] = useState("");
+  const [school, setschool] = useState("");
+
+  const [spellnew, setspellnew] = useState({
+    name: "",
+    ManaCost: "Minimal",
+    Components: ["Verbal", "Somatic"],
+    SchoolSpell: "",
+    description: "",
+  });
+
+  const [spelldata, setspelldata] = useState([
     {
-      id: "006",
       name: "Mana Bolt",
       Components: ["Verbal", "Somatic"],
       ManaCost: "Minimal",
@@ -12,7 +25,6 @@ function Book() {
       description: "A white bolt of Magical Energy",
     },
     {
-      id: "007",
       name: "Prestidigitation",
       Components: ["Verbal", "Somatic"],
       ManaCost: "Minimal",
@@ -20,52 +32,8 @@ function Book() {
       description:
         "This is a spell notice spellcasters use for practice, containing some utility functions as well. ",
     },
+
     {
-      id: "008",
-      name: "Locate Object",
-      Components: ["Verbal", "Somatic"],
-      ManaCost: "Average",
-      SchoolSpell: "Divination",
-      description:
-        "You visualize an object, your mind gaining an awareness of it, knowing its location and direction.",
-    },
-    {
-      id: "009",
-      name: "Mould Earth",
-      Components: ["Somatic"],
-      ManaCost: "Minimal",
-      SchoolSpell: "Transmutation",
-      description: "Manipulate the Earth below you within range, shaping it.",
-    },
-    {
-      id: "010",
-      name: "Light",
-      Components: ["Somatic"],
-      ManaCost: "Minimal",
-      SchoolSpell: "Evocation",
-      description:
-        "Touch an object and cause it to emit light in a radius all around it. ",
-    },
-    {
-      id: "011",
-      name: "Force Bolt",
-      Components: ["Somatic"],
-      ManaCost: "Average",
-      SchoolSpell: "Evocation",
-      description:
-        "Fire a bolt of Magical Energy, more powerful than the Bolt.",
-    },
-    {
-      id: "012",
-      name: "Detect Magic",
-      Components: ["None"],
-      ManaCost: "Minimal",
-      SchoolSpell: "Divination",
-      description:
-        "Weave light rays that bounce off of a magical phenomena that you can see, which reflect as a color corresponding with a school of magic related to what it was cast on.",
-    },
-    {
-      id: "013",
       name: "Wizard License",
       Components: ["Somatic"],
       ManaCost: "Minimal",
@@ -73,46 +41,120 @@ function Book() {
       description:
         "Showcase your Wizard License, a projected image of  Sigil unique to your soul displaying your Magical credentials. .",
     },
-  ];
+  ]);
+
+  const handleChange = (e: { target: { name: any; value: any } }) => {
+    const { name, value } = e.target;
+
+    setspellnew({
+      ...spellnew,
+      [name]: value,
+    });
+  };
+
+  const addspell = () => {
+    setspelldata([...spelldata, spellnew]);
+
+    setspellnew({
+      name: "",
+      ManaCost: "Minimal",
+      Components: ["Verbal", "Somatic"],
+      SchoolSpell: "",
+      description: "",
+    });
+  };
+
+  /*
+  <input
+            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+            placeholder="example@email.com"
+            onChange={(e) => {
+              settest(e.target.value);
+            }}
+          />
+          */
 
   return (
-    <HTMLFlipBook
-      width={370}
-      height={500}
-      maxShadowOpacity={0.5}
-      drawShadow={true}
-      showCover={true}
-      size="fixed"
-      {...({} as any)}
-    >
-      <div className=" bg-[url('/bookcover.png')] bg-cover bg-center">
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <img className="w-[250px]" src="/amethyst.png" />
+    <>
+      <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
+        <div className="w-full h-full flex flex-col items-center justify-start gap-5">
+          <div className="h-20 w-full" />
+
+          <input
+            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+            type="text"
+            name="name" // Matches the key in useState
+            value={spellnew.name}
+            onChange={handleChange}
+            placeholder="Spell Name"
+          />
+
+          <p className="text-lg">test</p>
+          <input
+            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+            type="text"
+            name="SchoolSpell" // Matches the key in useState
+            value={spellnew.SchoolSpell}
+            onChange={handleChange}
+            placeholder="Spell School"
+          />
+
+          <input
+            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+            type="text"
+            name="description" // Matches the key in useState
+            value={spellnew.description}
+            onChange={handleChange}
+            placeholder="Description"
+          />
+          <button
+            onClick={addspell}
+            className="bg-gray-200 h-10 hover:scale-110 "
+          >
+            Insert Spell
+          </button>
         </div>
       </div>
 
-      {spelldata.map((spell) => (
-        <div className="bg-[url('/parchment.png')] bg-cover bg-center">
-          <div className="w-full h-full flex flex-col items-center justify-start gap-5">
-            <div className="h-20 w-full" />
-            <p className="text-xl font-bold">{spell.name}</p>
-
-            <div className="w-full flex items-center justify-center gap-5">
-              <p className="text-lg">{spell.Components.join(", ")}</p>
-              <p className="text-lg">School: {spell.SchoolSpell}</p>
-            </div>
-
-            <p className="text-lg text-center w-full leading-relaxed">
-              {spell.description}
-            </p>
+      <HTMLFlipBook
+        key={spelldata.length} // Force re-render when spell data changes
+        width={370}
+        height={500}
+        maxShadowOpacity={0.5}
+        drawShadow={true}
+        showCover={true}
+        size="fixed"
+        {...({} as any)}
+      >
+        <div className=" bg-[url('/bookcover.png')] bg-cover bg-center">
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <img className="w-[250px]" src="/amethyst.png" />
           </div>
         </div>
-      ))}
 
-      <div className=" bg-[url('/bookcover.png')] bg-cover bg-center">
-        <div className="w-full h-full flex flex-col items-center justify-center"></div>
-      </div>
-    </HTMLFlipBook>
+        {spelldata.map((spell) => (
+          <div className="bg-[url('/parchment.png')] bg-cover bg-center">
+            <div className="w-full h-full flex flex-col items-center justify-start gap-5">
+              <div className="h-20 w-full" />
+              <p className="text-xl font-bold">{spell.name}</p>
+
+              <div className="w-full flex items-center justify-center gap-5">
+                <p className="text-lg">{spell.Components.join(", ")}</p>
+                <p className="text-lg">School: {spell.SchoolSpell}</p>
+              </div>
+
+              <p className="text-lg text-center w-full leading-relaxed">
+                {spell.description}
+              </p>
+            </div>
+          </div>
+        ))}
+
+        <div className=" bg-[url('/bookcover.png')] bg-cover bg-center">
+          <div className="w-full h-full flex flex-col items-center justify-center"></div>
+        </div>
+      </HTMLFlipBook>
+    </>
   );
 }
 

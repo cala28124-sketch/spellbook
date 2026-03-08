@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <div className="w-screen h-screen flex items-center justify-center bg-[url('/woodbackgroundreal.png')] bg-cover bg-center">
+      <div className="w-screen h-screen flex items-center justify-center gap-5 bg-[url('/woodbackgroundreal.png')] bg-cover bg-center">
         <Book />
       </div>
     </>
