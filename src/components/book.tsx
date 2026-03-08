@@ -11,7 +11,7 @@ function Book() {
   const [spellnew, setspellnew] = useState({
     name: "",
     ManaCost: "Minimal",
-    Components: ["Verbal", "Somatic"],
+    Components: [""],
     SchoolSpell: "",
     description: "",
   });
@@ -45,11 +45,17 @@ function Book() {
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
-
-    setspellnew({
-      ...spellnew,
-      [name]: value,
-    });
+    if (name === "Components") {
+      setspellnew({
+        ...spellnew,
+        [name]: value.split(",").map((comp: string) => comp.trim()),
+      });
+    } else {
+      setspellnew({
+        ...spellnew,
+        [name]: value,
+      });
+    }
   };
 
   const addspell = () => {
@@ -58,7 +64,7 @@ function Book() {
     setspellnew({
       name: "",
       ManaCost: "Minimal",
-      Components: ["Verbal", "Somatic"],
+      Components: [""],
       SchoolSpell: "",
       description: "",
     });
@@ -89,7 +95,14 @@ function Book() {
             placeholder="Spell Name"
           />
 
-          <p className="text-lg">test</p>
+          <input
+            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+            type="text"
+            name="Components" // Matches the key in useState
+            value={spellnew.Components.join(", ")}
+            onChange={handleChange}
+            placeholder="Components (comma separated)"
+          />
           <input
             className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
             type="text"
