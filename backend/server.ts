@@ -16,7 +16,7 @@ app.use(express.json());
 // Middleware to read URL encoded data (optional but recommended)
 app.use(express.urlencoded({ extended: false }))
 
-app.use('/api/events', eventRoutes);
+app.use('/api/spells', eventRoutes);
 app.use('/api/users', userRoutes);
 
 app.use(errorHandler);

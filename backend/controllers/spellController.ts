@@ -7,7 +7,8 @@ import usermodel from '../model/usermodel.js';
 // @route GET /api/events
 // @access Private
 const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-    const Spell = await SpellModel.find({ user: req.user?.id });
+    //const Spell = await SpellModel.find({ user: req.user?.id });
+    const Spell = await SpellModel.find({})
 
     res.status(200).json(Spell);
 })
@@ -23,7 +24,7 @@ const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
 
     const Spell = await SpellModel.create({
         text: req.body.text,
-        user: req.user?.id,
+        //user: req.user?.id,
     })
     
     res.status(200).json(Spell);
@@ -42,6 +43,7 @@ const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     }
 
     // first checks for user
+    /*
     const user = await usermodel.findById(req.user?.id);
 
     //check for user
@@ -49,13 +51,16 @@ const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
         res.status(401)
         throw new Error('User not found');
     }
+        
 
 
     // checks if logged in user matches the goal ID of the user it belongs to
+    
     if(Spell.user.toString() !== user.id) {
         res.status(401)
         throw new Error('User not authorized');
     }
+        */
 
     const updatedSpell = await SpellModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
 
@@ -75,6 +80,7 @@ const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     }
 
     // first checks for user
+    /*
     const user = await usermodel.findById(req.user?.id);
 
     //check for user
@@ -85,10 +91,12 @@ const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
 
 
     // checks if logged in user matches the goal ID of the user it belongs to
+    
     if(Spell.user.toString() !== user.id) {
         res.status(401)
         throw new Error('User not authorized');
     }
+        */
 
     await Spell.deleteOne();
 

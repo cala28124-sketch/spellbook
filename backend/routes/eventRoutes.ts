@@ -7,6 +7,12 @@ const router: Router = express.Router();
 
 export default router;
 
+router.route('/').get(GetSpells).post(SetSpells);
+
+router.route('/:id').put(UpdateSpells).delete(DeleteSpells);
+
+/*
 router.route('/').get(protect, GetSpells).post(protect, SetSpells);
 
 router.route('/:id').put(protect, UpdateSpells).delete(protect, DeleteSpells);
+*/
