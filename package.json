@@ -2,7 +2,8 @@
   "name": "spellbook-monorepo",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter frontend dev",
+    "backend": "pnpm --filter backend run server",
+    "frontend": "pnpm --filter frontend dev",
     "tauri": "tauri"
   },
   "devDependencies": {
