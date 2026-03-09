@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const eventSchema = new mongoose.Schema({
+const spellSchema = new mongoose.Schema({
     user:{type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User',
@@ -14,4 +14,4 @@ const eventSchema = new mongoose.Schema({
 })
 
 
-export default mongoose.model('Event', eventSchema);
+export default mongoose.model('Spell', spellSchema);

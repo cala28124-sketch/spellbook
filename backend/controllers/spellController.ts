@@ -1,44 +1,44 @@
 import { type Request, type Response, type RequestHandler } from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import eventModel from '../model/eventModel.js';
+import SpellModel from '../model/spellModel.js';
 import usermodel from '../model/usermodel.js';
 
 // @desc Get goals
 // @route GET /api/events
 // @access Private
-const GetEvents: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-    const Event = await eventModel.find({ user: req.user?.id });
+const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+    const Spell = await SpellModel.find({ user: req.user?.id });
 
-    res.status(200).json(Event);
+    res.status(200).json(Spell);
 })
 
 // @desc Set goals
 // @route POST /api/events
 // @access Private
-const SetEvents: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
     if(!req.body?.text) { 
         res.status(400)
         throw new Error('Please add a text field');
     }
 
-    const Event = await eventModel.create({
+    const Spell = await SpellModel.create({
         text: req.body.text,
         user: req.user?.id,
     })
     
-    res.status(200).json(Event);
+    res.status(200).json(Spell);
 })
 
 // @desc Update goals
 // @route PUT /api/events/:id
 // @access Private
-const UpdateEvents: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
 
-    const Event = await eventModel.findById(req.params.id);
+    const Spell = await SpellModel.findById(req.params.id);
 
-    if(!Event) {
+    if(!Spell) {
         res.status(400)
-        throw new Error('Event not found');
+        throw new Error('Spell not found');
     }
 
     // first checks for user
@@ -52,24 +52,24 @@ const UpdateEvents: RequestHandler = expressAsyncHandler(async (req: Request, re
 
 
     // checks if logged in user matches the goal ID of the user it belongs to
-    if(Event.user.toString() !== user.id) {
+    if(Spell.user.toString() !== user.id) {
         res.status(401)
         throw new Error('User not authorized');
     }
 
-    const updatedEvent = await eventModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    const updatedSpell = await SpellModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
 
 
-     res.status(200).json(updatedEvent);
+     res.status(200).json(updatedSpell);
 })
 
 // @desc Delete goals
 // @route DELETE /api/events/:id
 // @access Private
-const DeleteEvents: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-    const Event = await eventModel.findById(req.params.id);
+const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+    const Spell = await SpellModel.findById(req.params.id);
 
-    if(!Event) {
+    if(!Spell) {
         res.status(400)
         throw new Error('Goal not found');
     }
@@ -85,16 +85,16 @@ const DeleteEvents: RequestHandler = expressAsyncHandler(async (req: Request, re
 
 
     // checks if logged in user matches the goal ID of the user it belongs to
-    if(Event.user.toString() !== user.id) {
+    if(Spell.user.toString() !== user.id) {
         res.status(401)
         throw new Error('User not authorized');
     }
 
-    await Event.deleteOne();
+    await Spell.deleteOne();
 
     res.status(200).json({id: req.params.id});
 })
 
 
 
-export { GetEvents, SetEvents, UpdateEvents, DeleteEvents };
+export { GetSpells, SetSpells, UpdateSpells, DeleteSpells };

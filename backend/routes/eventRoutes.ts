@@ -1,12 +1,12 @@
 import e, { type Router } from 'express';
 import express, { type Request, type Response } from 'express';
-import { GetEvents, SetEvents, UpdateEvents, DeleteEvents } from '../controllers/eventController.js';
+import { GetSpells, SetSpells, UpdateSpells, DeleteSpells } from '../controllers/spellController.js';
 import protect from '../middleware/authmiddleware.js';
 
 const router: Router = express.Router();
 
 export default router;
 
-router.route('/').get(protect, GetEvents).post(protect, SetEvents);
+router.route('/').get(protect, GetSpells).post(protect, SetSpells);
 
-router.route('/:id').put(protect, UpdateEvents).delete(protect, DeleteEvents);
+router.route('/:id').put(protect, UpdateSpells).delete(protect, DeleteSpells);
