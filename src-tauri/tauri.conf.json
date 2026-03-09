@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "identifier": "com.github.cala28124-sketch.spellbook",
   "build": {
-    "beforeDevCommand": "pnpm dev",
+    "beforeDevCommand": "pnpm --filter frontend dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm build",
-    "frontendDist": "../dist"
+    "beforeBuildCommand": "pnpm --filter frontend build",
+    "frontendDist": "../frontend/dist"
   },
   "app": {
     "windows": [
