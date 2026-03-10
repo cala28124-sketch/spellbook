@@ -14,6 +14,14 @@ function Book() {
     description: "",
   });
 
+  const [spellfetch, setspellfetch] = useState({
+    name: "",
+    ManaCost: "Minimal",
+    Components: [""],
+    SchoolSpell: "",
+    description: "",
+  });
+
   const [spelldata, setspelldata] = useState([
     {
       name: "Mana Bolt",
@@ -113,6 +121,68 @@ function Book() {
   };
 
   /*
+  const farawayspell = async (id: string) => {
+    const response = await findSpellbyId(id, setspellfetch);
+    if (!response) {
+      throw new Error("Error finding spell");
+    }
+
+    const savedspells = [...spelldata, spellnew];
+
+    setspelldata([...spelldata, spellnew]);
+
+    localStorage.setItem("savedspells", JSON.stringify(savedspells));
+
+    setspellnew({
+      name: "",
+      ManaCost: "Minimal",
+      Components: [""],
+      SchoolSpell: "",
+      description: "",
+    });
+
+    setTimeout(() => {
+      if (Spellbook.current) {
+        Spellbook.current.pageFlip().flip(spelldata.length);
+      }
+    }, 100);
+  };
+*/
+
+  const farawayspell = async (id: string) => {
+    const response = await findSpellbyId(id, setspellfetch);
+    if (!response) {
+      throw new Error("Error finding spell");
+    }
+  };
+
+  useEffect(() => {
+    if (spellfetch.name == "") {
+      return;
+    }
+
+    const savedspells = [...spelldata, spellfetch];
+
+    setspelldata([...spelldata, spellfetch]);
+
+    localStorage.setItem("savedspells", JSON.stringify(savedspells));
+
+    setspellfetch({
+      name: "",
+      ManaCost: "Minimal",
+      Components: [""],
+      SchoolSpell: "",
+      description: "",
+    });
+
+    setTimeout(() => {
+      if (Spellbook.current) {
+        Spellbook.current.pageFlip().flip(spelldata.length);
+      }
+    }, 100);
+  }, [spellfetch]);
+
+  /*
   <input
             className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
             placeholder="example@email.com"
@@ -138,7 +208,7 @@ function Book() {
           />
 
           <button
-            onClick={() => findSpellbyId(test)}
+            onClick={() => farawayspell(test)}
             className="bg-gray-200 h-10 hover:scale-110 "
           >
             test;
