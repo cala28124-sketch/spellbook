@@ -4,7 +4,7 @@ import findSpellbyId from "./functions/fetchfunctions";
 
 function Book() {
   const Spellbook = useRef<any>(null);
-  const [test, settest] = useState("");
+  const [id, setid] = useState("");
 
   const [spellnew, setspellnew] = useState({
     name: "",
@@ -76,6 +76,32 @@ function Book() {
     }
   };
 
+  useEffect(() => {
+    if (spellfetch.name == "") {
+      return;
+    }
+
+    const savedspells = [...spelldata, spellfetch];
+
+    setspelldata([...spelldata, spellfetch]);
+
+    localStorage.setItem("savedspells", JSON.stringify(savedspells));
+
+    setspellfetch({
+      name: "",
+      ManaCost: "Minimal",
+      Components: [""],
+      SchoolSpell: "",
+      description: "",
+    });
+
+    setTimeout(() => {
+      if (Spellbook.current) {
+        Spellbook.current.pageFlip().flip(spelldata.length);
+      }
+    }, 100);
+  }, [spellfetch]);
+
   const addspell = () => {
     const savedspells = [...spelldata, spellnew];
 
@@ -120,67 +146,13 @@ function Book() {
     */
   };
 
-  /*
   const farawayspell = async (id: string) => {
-    const response = await findSpellbyId(id, setspellfetch);
-    if (!response) {
-      throw new Error("Error finding spell");
-    }
-
-    const savedspells = [...spelldata, spellnew];
-
-    setspelldata([...spelldata, spellnew]);
-
-    localStorage.setItem("savedspells", JSON.stringify(savedspells));
-
-    setspellnew({
-      name: "",
-      ManaCost: "Minimal",
-      Components: [""],
-      SchoolSpell: "",
-      description: "",
-    });
-
-    setTimeout(() => {
-      if (Spellbook.current) {
-        Spellbook.current.pageFlip().flip(spelldata.length);
-      }
-    }, 100);
-  };
-*/
-
-  const farawayspell = async (id: string) => {
+    setid("");
     const response = await findSpellbyId(id, setspellfetch);
     if (!response) {
       throw new Error("Error finding spell");
     }
   };
-
-  useEffect(() => {
-    if (spellfetch.name == "") {
-      return;
-    }
-
-    const savedspells = [...spelldata, spellfetch];
-
-    setspelldata([...spelldata, spellfetch]);
-
-    localStorage.setItem("savedspells", JSON.stringify(savedspells));
-
-    setspellfetch({
-      name: "",
-      ManaCost: "Minimal",
-      Components: [""],
-      SchoolSpell: "",
-      description: "",
-    });
-
-    setTimeout(() => {
-      if (Spellbook.current) {
-        Spellbook.current.pageFlip().flip(spelldata.length);
-      }
-    }, 100);
-  }, [spellfetch]);
 
   /*
   <input
@@ -202,13 +174,13 @@ function Book() {
             className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
             type="text"
             name="name" // Matches the key in useState
-            value={test}
-            onChange={(e) => settest(e.target.value)}
+            value={id}
+            onChange={(e) => setid(e.target.value)}
             placeholder="Spell Name"
           />
 
           <button
-            onClick={() => farawayspell(test)}
+            onClick={() => farawayspell(id)}
             className="bg-gray-200 h-10 hover:scale-110 "
           >
             test;

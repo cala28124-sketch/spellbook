@@ -20,10 +20,10 @@ const findSpellbyId = async (
 
     setSpellState({
       name: spell.name,
-      ManaCost: "Minimal", // Provide fallback if missing
+      ManaCost: "Minimal",
       Components: spell.Components,
       SchoolSpell: spell.SchoolSpell,
-      description: spell.Description, // Note: watch out for capital 'D' vs lowercase 'd'
+      description: spell.Description,
     });
     return spell;
   } catch (error) {
