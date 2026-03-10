@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from 'express';
 import colors from 'colors';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import eventRoutes from './routes/eventRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -9,6 +10,11 @@ import connectDB from './config/db.js';
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
+
+
+app.use(cors({
+  origin: 'http://localhost:1420' 
+}));
 
 connectDB();
 // Middleware to read JSON body
@@ -24,5 +30,6 @@ app.use(errorHandler);
 
 
 app.listen(port, () => console.log(`Server started running on port ${port}`));
+
 
 

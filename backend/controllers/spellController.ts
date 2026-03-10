@@ -8,22 +8,39 @@ import usermodel from '../model/usermodel.js';
 // @access Private
 const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
     //const Spell = await SpellModel.find({ user: req.user?.id });
-    const Spell = await SpellModel.find({})
+    //const Spell = await SpellModel.find({})
+    const spell = await SpellModel.findById(req.params.id);
 
-    res.status(200).json(Spell);
+    res.status(200).json(spell);
 })
 
 // @desc Set goals
 // @route POST /api/events
 // @access Private
 const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-    if(!req.body?.text) { 
+
+    const { name, Components, SchoolSpell, Description } = req.body;
+
+
+    if(!req.body?.name) { 
         res.status(400)
-        throw new Error('Please add a text field');
+        throw new Error('Please add a spell name');
+    }else if(!req.body?.Components) { 
+        res.status(400)
+        throw new Error('Please add atleast one component, or none');
+    } else if(!req.body?.SchoolSpell) { 
+        res.status(400)
+        throw new Error('Please add a school name');
+    }else if(!req.body?.Description) { 
+        res.status(400)
+        throw new Error('Please add a description');
     }
 
     const Spell = await SpellModel.create({
-        text: req.body.text,
+        name: req.body.name,
+        Components:req.body.Components,
+        SchoolSpell:req.body.SchoolSpell,
+        Description:req.body.Description,
         //user: req.user?.id,
     })
     

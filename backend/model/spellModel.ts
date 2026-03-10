@@ -7,7 +7,19 @@ const spellSchema = new mongoose.Schema({
         ref: 'User',
     },
     */
-    text: {
+    name: {
+        type: String,
+        required: [true, 'Please add a text value']
+    },
+    Components: {
+        type: [String],
+        required: [true, 'Please add a text value']
+    },
+    SchoolSpell: {
+        type: String,
+        required: [true, 'Please add a text value']
+    },
+    Description: {
         type: String,
         required: [true, 'Please add a text value']
     }
@@ -17,3 +29,12 @@ const spellSchema = new mongoose.Schema({
 
 
 export default mongoose.model('Spell', spellSchema);
+
+
+/*
+ name: "Mana Bolt",
+      Components: ["Verbal", "Somatic"],
+      ManaCost: "Minimal",
+      SchoolSpell: "Evocation",
+      description: "A white bolt of Magical Energy",
+      */

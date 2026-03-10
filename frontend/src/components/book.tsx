@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
+import findSpellbyId from "./functions/fetchfunctions";
 
 function Book() {
   const Spellbook = useRef<any>(null);
+  const [test, settest] = useState("");
 
   const [spellnew, setspellnew] = useState({
     name: "",
@@ -122,6 +124,28 @@ function Book() {
 
   return (
     <>
+      <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
+        <div className="w-full h-full flex flex-col items-center justify-start gap-5">
+          <div className="h-20 w-full" />
+
+          <input
+            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+            type="text"
+            name="name" // Matches the key in useState
+            value={test}
+            onChange={(e) => settest(e.target.value)}
+            placeholder="Spell Name"
+          />
+
+          <button
+            onClick={() => findSpellbyId(test)}
+            className="bg-gray-200 h-10 hover:scale-110 "
+          >
+            test;
+          </button>
+        </div>
+      </div>
+
       <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
         <div className="w-full h-full flex flex-col items-center justify-start gap-5">
           <div className="h-20 w-full" />
