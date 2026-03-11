@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
-import findSpellbyId from "./functions/fetchfunctions";
+import { findSpellbyId, addspelldata } from "./functions/fetchfunctions";
 
 function Book() {
   const Spellbook = useRef<any>(null);
@@ -8,43 +8,43 @@ function Book() {
 
   const [spellnew, setspellnew] = useState({
     name: "",
-    ManaCost: "Minimal",
+    //ManaCost: "Minimal",
     Components: [""],
     SchoolSpell: "",
-    description: "",
+    Description: "",
   });
 
   const [spellfetch, setspellfetch] = useState({
     name: "",
-    ManaCost: "Minimal",
+    //ManaCost: "Minimal",
     Components: [""],
     SchoolSpell: "",
-    description: "",
+    Description: "",
   });
 
   const [spelldata, setspelldata] = useState([
     {
       name: "Mana Bolt",
       Components: ["Verbal", "Somatic"],
-      ManaCost: "Minimal",
+      //ManaCost: "Minimal",
       SchoolSpell: "Evocation",
-      description: "A white bolt of Magical Energy",
+      Description: "A white bolt of Magical Energy",
     },
     {
       name: "Prestidigitation",
       Components: ["Verbal", "Somatic"],
-      ManaCost: "Minimal",
+      //ManaCost: "Minimal",
       SchoolSpell: "Unique",
-      description:
+      Description:
         "This is a spell notice spellcasters use for practice, containing some utility functions as well. ",
     },
 
     {
       name: "Wizard License",
       Components: ["Somatic"],
-      ManaCost: "Minimal",
+      //ManaCost: "Minimal",
       SchoolSpell: "Conjuration",
-      description:
+      Description:
         "Showcase your Wizard License, a projected image of  Sigil unique to your soul displaying your Magical credentials. .",
     },
   ]);
@@ -89,10 +89,10 @@ function Book() {
 
     setspellfetch({
       name: "",
-      ManaCost: "Minimal",
+      //ManaCost: "Minimal",
       Components: [""],
       SchoolSpell: "",
-      description: "",
+      Description: "",
     });
 
     setTimeout(() => {
@@ -111,10 +111,10 @@ function Book() {
 
     setspellnew({
       name: "",
-      ManaCost: "Minimal",
+      //ManaCost: "Minimal",
       Components: [""],
       SchoolSpell: "",
-      description: "",
+      Description: "",
     });
 
     setTimeout(() => {
@@ -151,6 +151,13 @@ function Book() {
     const response = await findSpellbyId(name.toLowerCase(), setspellfetch);
     if (!response) {
       throw new Error("Error finding spell");
+    }
+  };
+
+  const sendfarawayspell = async () => {
+    const response = await addspelldata(spellnew);
+    if (!response) {
+      throw new Error("Error sending spell");
     }
   };
 
@@ -221,8 +228,8 @@ function Book() {
           <input
             className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
             type="text"
-            name="description" // Matches the key in useState
-            value={spellnew.description}
+            name="Description" // Matches the key in useState
+            value={spellnew.Description}
             onChange={handleChange}
             placeholder="Description"
           />
@@ -231,6 +238,12 @@ function Book() {
             className="bg-gray-200 h-10 hover:scale-110 "
           >
             Insert Spell
+          </button>
+          <button
+            onClick={sendfarawayspell}
+            className="bg-gray-200 h-10 hover:scale-110 "
+          >
+            Send Spell
           </button>
         </div>
       </div>
@@ -267,7 +280,7 @@ function Book() {
               </div>
 
               <p className="text-lg text-center w-full leading-relaxed">
-                {spell.description}
+                {spell.Description}
               </p>
               <button
                 onClick={() => deletespell(index)}

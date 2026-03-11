@@ -59,7 +59,7 @@ const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
 // @access Private
 const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
 
-    const Spell = await SpellModel.findById(req.params.id);
+    const Spell = await SpellModel.findById(req.params.identify);
 
     if(!Spell) {
         res.status(400)
@@ -86,7 +86,7 @@ const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     }
         */
 
-    const updatedSpell = await SpellModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    const updatedSpell = await SpellModel.findByIdAndUpdate(req.params.identify, req.body, {new: true})
 
 
      res.status(200).json(updatedSpell);
@@ -96,7 +96,7 @@ const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
 // @route DELETE /api/events/:id
 // @access Private
 const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-    const Spell = await SpellModel.findById(req.params.id);
+    const Spell = await SpellModel.findById(req.params.identify);
 
     if(!Spell) {
         res.status(400)
@@ -124,7 +124,7 @@ const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
 
     await Spell.deleteOne();
 
-    res.status(200).json({id: req.params.id});
+    res.status(200).json({id: req.params.identify});
 })
 
 

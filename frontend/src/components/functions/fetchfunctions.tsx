@@ -1,4 +1,4 @@
-const findSpellbyId = async (
+export const findSpellbyId = async (
   name: string,
   setSpellState: (data: any) => void,
 ) => {
@@ -23,7 +23,7 @@ const findSpellbyId = async (
       ManaCost: "Minimal",
       Components: spell.Components,
       SchoolSpell: spell.SchoolSpell,
-      description: spell.Description,
+      Description: spell.Description,
     });
     return spell;
   } catch (error) {
@@ -32,4 +32,39 @@ const findSpellbyId = async (
   }
 };
 
-export default findSpellbyId;
+export const addspelldata = async (SpellState: any) => {
+  const response = await fetch("http://localhost:5000/api/spells/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(SpellState),
+  });
+
+  // const data = await send.json(); - this gets the data from the fetch request back
+
+  if (!response.ok) {
+    const errorLog = await response.json();
+    console.error("Mongoose Validation Error:", errorLog);
+    throw new Error("Error while sending request");
+  } else {
+    return true;
+  }
+  /*
+    only need this if try block used
+	 catch (error) {
+		console.error(error);
+		return false;
+	}
+ */
+};
+
+/*
+  const [spellnew, setspellnew] = useState({
+    name: "",
+    ManaCost: "Minimal",
+    Components: [""],
+    SchoolSpell: "",
+    description: "",
+  });
+  */
