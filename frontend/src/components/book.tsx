@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
 import findSpellbyId from "./functions/fetchfunctions";
 
 function Book() {
   const Spellbook = useRef<any>(null);
-  const [id, setid] = useState("");
+  const [search, setsearch] = useState("");
 
   const [spellnew, setspellnew] = useState({
     name: "",
@@ -146,9 +146,9 @@ function Book() {
     */
   };
 
-  const farawayspell = async (id: string) => {
-    setid("");
-    const response = await findSpellbyId(id, setspellfetch);
+  const farawayspell = async (name: string) => {
+    setsearch("");
+    const response = await findSpellbyId(name.toLowerCase(), setspellfetch);
     if (!response) {
       throw new Error("Error finding spell");
     }
@@ -174,13 +174,13 @@ function Book() {
             className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
             type="text"
             name="name" // Matches the key in useState
-            value={id}
-            onChange={(e) => setid(e.target.value)}
+            value={search}
+            onChange={(e) => setsearch(e.target.value)}
             placeholder="Spell Name"
           />
 
           <button
-            onClick={() => farawayspell(id)}
+            onClick={() => farawayspell(search)}
             className="bg-gray-200 h-10 hover:scale-110 "
           >
             test;

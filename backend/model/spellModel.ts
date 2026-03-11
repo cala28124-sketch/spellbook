@@ -9,7 +9,8 @@ const spellSchema = new mongoose.Schema({
     */
     name: {
         type: String,
-        required: [true, 'Please add a text value']
+        required: [true, 'Please add a text value'], 
+        index: [true],
     },
     Components: {
         type: [String],

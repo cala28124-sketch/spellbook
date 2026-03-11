@@ -1,9 +1,9 @@
 const findSpellbyId = async (
-  id: string,
+  name: string,
   setSpellState: (data: any) => void,
 ) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/spells/${id}`);
+    const response = await fetch(`http://localhost:5000/api/spells/${name}`);
 
     if (!response.ok) {
       throw new Error("Error while sending request");

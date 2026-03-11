@@ -9,7 +9,9 @@ export default router;
 
 router.route('/').post(SetSpells);
 
-router.route('/:id').get(GetSpells).put(UpdateSpells).delete(DeleteSpells);
+router.route('/:identify').put(UpdateSpells).delete(DeleteSpells).get(GetSpells);
+
+
 
 /*
 router.route('/').get(protect, GetSpells).post(protect, SetSpells);

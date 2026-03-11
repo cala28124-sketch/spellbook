@@ -9,7 +9,14 @@ import usermodel from '../model/usermodel.js';
 const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
     //const Spell = await SpellModel.find({ user: req.user?.id });
     //const Spell = await SpellModel.find({})
-    const spell = await SpellModel.findById(req.params.id);
+    //const spell = await SpellModel.findById(req.params.id);
+    const name = req.params.identify as string;
+    const spell = await SpellModel.findOne({name: name});
+
+    if(!spell){
+        res.status(404);
+        throw new Error("Spell Not Found");
+    }
 
     res.status(200).json(spell);
 })
