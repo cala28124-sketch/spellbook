@@ -97,7 +97,7 @@ function Book() {
 
     setTimeout(() => {
       if (Spellbook.current) {
-        Spellbook.current.pageFlip().flip(spelldata.length);
+        Spellbook.current.pageFlip().flip(spelldata.length + 2);
       }
     }, 100);
   }, [spellfetch]);
@@ -119,7 +119,7 @@ function Book() {
 
     setTimeout(() => {
       if (Spellbook.current) {
-        Spellbook.current.pageFlip().flip(spelldata.length);
+        Spellbook.current.pageFlip().flip(spelldata.length + 2);
       }
     }, 100);
   };
@@ -132,7 +132,7 @@ function Book() {
 
     setTimeout(() => {
       if (Spellbook.current) {
-        Spellbook.current.pageFlip().flip(spelldata.length - 1);
+        Spellbook.current.pageFlip().flip(1);
       }
     }, 100);
 
