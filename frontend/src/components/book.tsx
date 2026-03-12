@@ -148,17 +148,35 @@ function Book() {
 
   const farawayspell = async (name: string) => {
     setsearch("");
-    const response = await findSpellbyId(name.toLowerCase(), setspellfetch);
+    name = name
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
+      .join(" ");
+
+    const response = await findSpellbyId(name, setspellfetch);
     if (!response) {
       throw new Error("Error finding spell");
     }
   };
 
   const sendfarawayspell = async () => {
+    const name = spellnew.name as string;
+
+    spellnew.name = name
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
+      .join(" ");
+
     const response = await addspelldata(spellnew);
     if (!response) {
       throw new Error("Error sending spell");
     }
+  };
+
+  const flipspell = (index: number) => {
+    Spellbook.current.pageFlip().flip(index);
   };
 
   /*
@@ -259,9 +277,22 @@ function Book() {
         size="fixed"
         {...({} as any)}
       >
-        <div className=" bg-[url('/bookcover.png')] bg-cover bg-center">
+        <div className="bg-[url('/bookcover.png')] bg-cover bg-center">
           <div className="w-full h-full flex flex-col items-center justify-center">
             <img className="w-[250px]" src="/amethyst.png" />
+          </div>
+        </div>
+
+        <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
+          <div className="w-full h-full flex flex-col items-center justify-center flex-wrap">
+            {spelldata.map((spell, index) => (
+              <button
+                onClick={() => flipspell(index + 2)}
+                className="bg-gray-200 h-10 hover:scale-110 "
+              >
+                {spell.name}
+              </button>
+            ))}
           </div>
         </div>
 
