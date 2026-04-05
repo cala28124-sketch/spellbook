@@ -60,6 +60,7 @@ const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
 // @access Private
 const GetPrivspell = expressAsyncHandler(async (req: Request, res: Response) => {
     const userID = req.user?.id;
+    const name = req.params.identify as string;
     //can do this later if want to find all public/private spells, but for now just do private
     /*
     const spells = await spellModel.find({ $or: [
@@ -68,7 +69,13 @@ const GetPrivspell = expressAsyncHandler(async (req: Request, res: Response) => 
         ] });
          */
 
-    const spells = await spellModel.find({ user: userID });
+    const spells = await spellModel.findOne({ user: userID, name: name });
+
+    if (!spells) {
+        res.status(404);
+        throw new Error('Spell not found');
+    }
+
      res.status(200).json(spells);
 })
 

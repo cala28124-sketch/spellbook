@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import HTMLFlipBook from "react-pageflip";
-import { findSpellbyId, addspelldata } from "./functions/fetchfunctions";
+import {
+  findSpellbyId,
+  addspelldata,
+  findSpellbyIdprivate,
+  addspelldatapriv,
+} from "./functions/fetchfunctions";
 
 function Book() {
   const Spellbook = useRef<any>(null);
