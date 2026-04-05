@@ -61,6 +61,35 @@ const registerUser: RequestHandler = expressAsyncHandler (async (req: Request, r
 // @desc Authenticate a user
 // @route POST /api/users/login
 // @access Public
+
+const loginUser: RequestHandler = expressAsyncHandler (async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    //check for user email
+
+    const user = await userModel.findOne({email});
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+        const token = generateToken(user._id.toString());
+        // Set the token as a cookie in the response
+
+        res.cookie('token', token, {
+            httpOnly: true, // This makes the cookie inaccessible to JavaScript on the client side
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            sameSite: 'strict', // Prevents the cookie from being sent with cross-site requests
+            maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expires in 30 days
+        });
+
+        res.status(200).json({message: 'Login successful'});
+    }
+    else{         
+        res.status(400);
+        throw new Error('Invalid credentials data');
+    }
+
+})
+/*
+old function no cookies
 const loginUser: RequestHandler = expressAsyncHandler (async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
@@ -82,6 +111,7 @@ const loginUser: RequestHandler = expressAsyncHandler (async (req: Request, res:
     }
 
 })
+    */
 
 
 

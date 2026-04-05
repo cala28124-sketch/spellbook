@@ -2,7 +2,9 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import Book from "./components/book";
+import Login from "./components/login";
 import "./App.css";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   /*
@@ -18,9 +20,14 @@ function App() {
 
   return (
     <>
-      <div className="w-screen h-screen flex items-center justify-center gap-5 bg-[url('/woodbackgroundreal.png')] bg-cover bg-center">
-        <Book />
-      </div>
+      <Router>
+        <div className="w-screen h-screen flex items-center justify-center gap-5 bg-[url('/woodbackgroundreal.png')] bg-cover bg-center">
+          <Routes>
+            <Route path="/book" element={<Book />} />
+            <Route path="/" element={<Login />} />
+          </Routes>
+        </div>
+      </Router>
     </>
   );
 }

@@ -14,6 +14,33 @@ declare global {
 
 const protect: RequestHandler= expressAsyncHandler (async (req: Request, res: Response, next: NextFunction) => {
     let token;
+    token = req.cookies.token;
+
+    if(token) {
+        try{
+            const decoded = jsonwebtoken.verify(token, process.env.JWT_SECREt as string) as jsonwebtoken.JwtPayload;
+            req.user = await userModel.findById(decoded.id).select('-password');
+            next();
+            // next just makes it continue and call the next middleware
+        } catch (error) {
+            console.error(error);
+            res.status(401);
+            throw new Error('Not authorized, token failed');
+        }
+    }
+
+    if(!token) {
+        res.status(401);
+        throw new Error('Not authorized, no token');
+    }
+
+});
+
+/* 
+old protect no cookies
+const protect: RequestHandler= expressAsyncHandler (async (req: Request, res: Response, next: NextFunction) => {
+    let token;
+    
 
 
     // checks if authorization header exists and if it starts with Bearer, which is the standard for sending tokens in the header.
@@ -43,7 +70,7 @@ const protect: RequestHandler= expressAsyncHandler (async (req: Request, res: Re
     }
 
 });
-
+*/
 
 
 export default protect;
