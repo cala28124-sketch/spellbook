@@ -2,10 +2,11 @@ import { type Request, type Response, type RequestHandler } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import SpellModel from '../model/spellModel.js';
 import usermodel from '../model/usermodel.js';
+import spellModel from '../model/spellModel.js';
 
-// @desc Get goals
-// @route GET /api/events
-// @access Private
+// @desc Get spell
+// @route GET /api/
+// @access public
 const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
     //const Spell = await SpellModel.find({ user: req.user?.id });
     //const Spell = await SpellModel.find({})
@@ -52,6 +53,52 @@ const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
     })
     
     res.status(200).json(Spell);
+})
+
+// @desc Get private spells
+// @route GET /api/privatespell
+// @access Private
+const GetPrivspell = expressAsyncHandler(async (req: Request, res: Response) => {
+    const userID = req.user?.id;
+    //can do this later if want to find all public/private spells, but for now just do private
+    /*
+    const spells = await spellModel.find({ $or: [
+            { isPublic: true },        // Show all public spells
+            { user: userID }           // Show spells belonging to this specific user
+        ] });
+         */
+
+    const spells = await spellModel.find({ user: userID });
+     res.status(200).json(spells);
+})
+
+// @desc Set private spells
+// @route POST /api/privatespell
+// @access Private
+const SetPrivSpell = expressAsyncHandler(async (req: Request, res: Response) => {
+    if(!req.body?.name) { 
+        res.status(400)
+        throw new Error('Please add a spell name');
+    }else if(!req.body?.Components) { 
+        res.status(400)
+        throw new Error('Please add atleast one component, or none');
+    } else if(!req.body?.SchoolSpell) { 
+        res.status(400)
+        throw new Error('Please add a school name');
+    }else if(!req.body?.Description) { 
+        res.status(400)
+        throw new Error('Please add a description');
+    }
+
+    const Event = await spellModel.create({
+        name: req.body.name,
+        Components:req.body.Components,
+        SchoolSpell:req.body.SchoolSpell,
+        Description:req.body.Description,
+        user: req.user?.id,
+    })
+    
+    res.status(200).json(Event);
 })
 
 // @desc Update goals
@@ -129,4 +176,4 @@ const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
 
 
 
-export { GetSpells, SetSpells, UpdateSpells, DeleteSpells };
+export { GetSpells, SetSpells, UpdateSpells, DeleteSpells, GetPrivspell, SetPrivSpell };
