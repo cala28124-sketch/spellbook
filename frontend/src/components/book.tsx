@@ -6,11 +6,14 @@ import {
   findSpellbyIdprivate,
   addspelldatapriv,
 } from "./functions/fetchfunctions";
+import Popup from "./popup";
 
 function Book() {
   const Spellbook = useRef<any>(null);
   const [search, setsearch] = useState("");
   const [popup, setpopup] = useState(false);
+  const [popup2, setpopup2] = useState(false);
+  const [popup3, setpopup3] = useState(false);
 
   const [spellnew, setspellnew] = useState({
     name: "",
@@ -197,81 +200,6 @@ function Book() {
 
   return (
     <>
-      <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
-        <div className="w-full h-full flex flex-col items-center justify-start gap-5">
-          <div className="h-20 w-full" />
-
-          <input
-            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
-            type="text"
-            name="name" // Matches the key in useState
-            value={search}
-            onChange={(e) => setsearch(e.target.value)}
-            placeholder="Spell Name"
-          />
-
-          <button
-            onClick={() => farawayspell(search)}
-            className="bg-gray-200 h-10 hover:scale-110 "
-          >
-            test;
-          </button>
-        </div>
-      </div>
-
-      <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
-        <div className="w-full h-full flex flex-col items-center justify-start gap-5">
-          <div className="h-20 w-full" />
-
-          <input
-            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
-            type="text"
-            name="name" // Matches the key in useState
-            value={spellnew.name}
-            onChange={handleChange}
-            placeholder="Spell Name"
-          />
-
-          <input
-            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
-            type="text"
-            name="Components" // Matches the key in useState
-            value={spellnew.Components.join(", ")}
-            onChange={handleChange}
-            placeholder="Components (comma separated)"
-          />
-          <input
-            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
-            type="text"
-            name="SchoolSpell" // Matches the key in useState
-            value={spellnew.SchoolSpell}
-            onChange={handleChange}
-            placeholder="Spell School"
-          />
-
-          <input
-            className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
-            type="text"
-            name="Description" // Matches the key in useState
-            value={spellnew.Description}
-            onChange={handleChange}
-            placeholder="Description"
-          />
-          <button
-            onClick={addspell}
-            className="bg-gray-200 h-10 hover:scale-110 "
-          >
-            Insert Spell
-          </button>
-          <button
-            onClick={sendfarawayspell}
-            className="bg-gray-200 h-10 hover:scale-110 "
-          >
-            Send Spell
-          </button>
-        </div>
-      </div>
-
       <HTMLFlipBook
         key={spelldata.length}
         ref={Spellbook} // Force re-render when spell data changes
@@ -338,31 +266,108 @@ function Book() {
           className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100"
           onClick={() => setpopup(true)}
         >
-          popup
-        </button>
-        <button className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100">
           add spell
         </button>
-        <button className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100">
+        <button
+          className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100"
+          onClick={() => setpopup2(true)}
+        >
           send spell
         </button>
-      </div>
-      <button
-        className={`${popup ? `` : `hidden`} fixed inset-0 z-50 flex items-center justify-center bg-black/50`}
-        onClick={() => setpopup(false)}
-      >
-        <div
-          className="relative w-[80dvw] h-[80dvh] bg-amber-100 flex items-center justify-center rounded-lg"
-          onClick={(e) => e.stopPropagation()}
+        <button
+          className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100"
+          onClick={() => setpopup3(true)}
         >
-          <button
-            className="absolute top-2 left-2 w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100"
-            onClick={() => setpopup(false)}
-          >
-            test off
-          </button>
-        </div>
-      </button>
+          spell list
+        </button>
+      </div>
+
+      <Popup
+        popup={popup}
+        setpopup={setpopup}
+        internal={
+          <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
+            <div className="w-full h-full flex flex-col items-center justify-start gap-5">
+              <div className="h-20 w-full" />
+
+              <input
+                className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+                type="text"
+                name="name" // Matches the key in useState
+                value={search}
+                onChange={(e) => setsearch(e.target.value)}
+                placeholder="Spell Name"
+              />
+
+              <button
+                onClick={() => farawayspell(search)}
+                className="bg-gray-200 h-10 hover:scale-110 "
+              >
+                test;
+              </button>
+            </div>
+          </div>
+        }
+      />
+      <Popup
+        popup={popup2}
+        setpopup={setpopup2}
+        internal={
+          <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
+            <div className="w-full h-full flex flex-col items-center justify-start gap-5">
+              <div className="h-20 w-full" />
+
+              <input
+                className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+                type="text"
+                name="name" // Matches the key in useState
+                value={spellnew.name}
+                onChange={handleChange}
+                placeholder="Spell Name"
+              />
+
+              <input
+                className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+                type="text"
+                name="Components" // Matches the key in useState
+                value={spellnew.Components.join(", ")}
+                onChange={handleChange}
+                placeholder="Components (comma separated)"
+              />
+              <input
+                className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+                type="text"
+                name="SchoolSpell" // Matches the key in useState
+                value={spellnew.SchoolSpell}
+                onChange={handleChange}
+                placeholder="Spell School"
+              />
+
+              <input
+                className="w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+                type="text"
+                name="Description" // Matches the key in useState
+                value={spellnew.Description}
+                onChange={handleChange}
+                placeholder="Description"
+              />
+              <button
+                onClick={addspell}
+                className="bg-gray-200 h-10 hover:scale-110 "
+              >
+                Insert Spell
+              </button>
+              <button
+                onClick={sendfarawayspell}
+                className="bg-gray-200 h-10 hover:scale-110 "
+              >
+                Send Spell
+              </button>
+            </div>
+          </div>
+        }
+      />
+      <Popup popup={popup2} setpopup={setpopup2} internal={<div></div>} />
     </>
   );
 }
