@@ -5,6 +5,7 @@ import {
   addspelldata,
   findSpellbyIdprivate,
   addspelldatapriv,
+  GetAllSpells,
 } from "./functions/fetchfunctions";
 import Popup from "./popup";
 
@@ -14,6 +15,22 @@ function Book() {
   const [popup, setpopup] = useState(false);
   const [popup2, setpopup2] = useState(false);
   const [popup3, setpopup3] = useState(false);
+
+  const [spelllist, setspelllist] = useState<
+    {
+      name: string;
+      Components: string[];
+      SchoolSpell: string;
+      Description: string;
+    }[]
+  >([]);
+
+  const [searchlist, setsearchlist] = useState("");
+
+  // filter based on search
+  const filteredspells = spelllist.filter((spell) =>
+    spell.name.toLowerCase().includes(searchlist.toLowerCase()),
+  );
 
   const [spellnew, setspellnew] = useState({
     name: "",
@@ -57,6 +74,10 @@ function Book() {
         "Showcase your Wizard License, a projected image of  Sigil unique to your soul displaying your Magical credentials. .",
     },
   ]);
+
+  useEffect(() => {
+    GetAllSpells(setspelllist);
+  }, []);
 
   useEffect(() => {
     const savedspells = localStorage.getItem("savedspells")
@@ -368,9 +389,25 @@ function Book() {
         }
       />
       <Popup
-        popup={popup2}
-        setpopup={setpopup2}
-        internal={<div className="flex items-center justify-center"></div>}
+        popup={popup3}
+        setpopup={setpopup3}
+        internal={
+          <>
+            <input
+              className="absolute top-2 right-2 w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+              type="text"
+              name="name"
+              value={searchlist}
+              onChange={(e) => setsearchlist(e.target.value)}
+              placeholder="spell name"
+            ></input>
+            <div className="flex-col items-center justify-center">
+              {filteredspells.map((spell, index) => (
+                <p key={index}>{spell.name}</p>
+              ))}
+            </div>
+          </>
+        }
       />
     </>
   );

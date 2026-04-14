@@ -138,16 +138,13 @@ export const addspelldatapriv = async (SpellState: any) => {
 
 export const GetAllSpells = async (setSpellState: (data: any) => void) => {
   try {
-    const response = await fetch(
-      `http://localhost:5000/api/spells/privatespell/`,
-      {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`http://localhost:5000/api/spells/`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Error while sending request");
@@ -162,7 +159,7 @@ export const GetAllSpells = async (setSpellState: (data: any) => void) => {
     console.log(spell.Description);
     */
 
-    setSpellState({ response });
+    setSpellState(spell);
     return spell;
   } catch (error) {
     console.error(error);
