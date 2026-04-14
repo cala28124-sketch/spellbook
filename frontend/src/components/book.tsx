@@ -367,7 +367,11 @@ function Book() {
           </div>
         }
       />
-      <Popup popup={popup2} setpopup={setpopup2} internal={<div></div>} />
+      <Popup
+        popup={popup2}
+        setpopup={setpopup2}
+        internal={<div className="flex items-center justify-center"></div>}
+      />
     </>
   );
 }
