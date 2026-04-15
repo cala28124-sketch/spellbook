@@ -401,9 +401,19 @@ function Book() {
               onChange={(e) => setsearchlist(e.target.value)}
               placeholder="spell name"
             ></input>
-            <div className="flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center gap-4">
               {filteredspells.map((spell, index) => (
-                <p key={index}>{spell.name}</p>
+                <>
+                  <div className="flex flex-col justify-center items-center text-lg bg-amber-500 p-4 w-full h-full border-5 border-amber-300">
+                    <p key={index}>{spell.name}</p>
+                    <button
+                      onClick={() => farawayspell(spell.name)}
+                      className="bg-amber-500 border-5 border-amber-500 p-3 hover:border-amber-300 hover:bg-amber-600 transition duration-100"
+                    >
+                      add
+                    </button>
+                  </div>
+                </>
               ))}
             </div>
           </>
