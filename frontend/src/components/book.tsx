@@ -18,6 +18,7 @@ function Book() {
 
   const [spelllist, setspelllist] = useState<
     {
+      user: string;
       name: string;
       Components: string[];
       SchoolSpell: string;
@@ -176,17 +177,23 @@ function Book() {
     */
   };
 
-  const farawayspell = async (name: string) => {
+  const farawayspell = async (name: string, priv: boolean) => {
     setsearch("");
     name = name
       .toLowerCase()
       .split(" ")
       .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
       .join(" ");
-
-    const response = await findSpellbyId(name, setspellfetch);
-    if (!response) {
-      throw new Error("Error finding spell");
+    if (!priv) {
+      const response = await findSpellbyId(name, setspellfetch);
+      if (!response) {
+        throw new Error("Error finding spell");
+      }
+    } else {
+      const response = await findSpellbyIdprivate(name, setspellfetch);
+      if (!response) {
+        throw new Error("Error finding spell");
+      }
     }
   };
 
@@ -321,7 +328,7 @@ function Book() {
               />
 
               <button
-                onClick={() => farawayspell(search)}
+                onClick={() => farawayspell(search, false)}
                 className="bg-gray-200 h-10 hover:scale-110 "
               >
                 test;
@@ -407,7 +414,9 @@ function Book() {
                   <div className="flex flex-col justify-center items-center text-lg bg-amber-500 p-4 w-full h-full border-5 border-amber-300">
                     <p key={index}>{spell.name}</p>
                     <button
-                      onClick={() => farawayspell(spell.name)}
+                      onClick={() =>
+                        farawayspell(spell.name, spell.user ? true : false)
+                      }
                       className="bg-amber-500 border-5 border-amber-500 p-3 hover:border-amber-300 hover:bg-amber-600 transition duration-100"
                     >
                       add
