@@ -12,7 +12,7 @@ const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
     //const Spell = await SpellModel.find({})
     //const spell = await SpellModel.findById(req.params.id);
     const name = req.params.identify as string;
-    const spell = await SpellModel.findOne({name: name});
+    const spell = await SpellModel.findOne({name: name, user: {$exists: false}});
 
     if(!spell){
         res.status(404);
@@ -115,7 +115,10 @@ const GetAllSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     //const Spell = await SpellModel.find({ user: req.user?.id });
     //const Spell = await SpellModel.find({})
     //const spell = await SpellModel.findById(req.params.id);
-    const spells = await SpellModel.find({});
+    const spells = await SpellModel.find({$or: [
+    { user: { $exists: false } },
+    { user: req.user?.id }
+  ]});
 
     if(!spells){
         res.status(404);

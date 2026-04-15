@@ -7,7 +7,7 @@ const router: Router = express.Router();
 
 export default router;
 
-router.route('/').post(SetSpells).get(GetAllSpells);
+router.route('/').post(SetSpells).get(protect, GetAllSpells);
 router.route('/privatespell').post(protect, SetPrivSpell);
 router.route('/privatespell/:identify').get(protect, GetPrivspell);
 router.route('/:identify').put(UpdateSpells).delete(DeleteSpells).get(GetSpells).get(protect, GetPrivspell);
