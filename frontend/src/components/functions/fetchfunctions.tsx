@@ -3,7 +3,13 @@ export const findSpellbyId = async (
   setSpellState: (data: any) => void,
 ) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/spells/${name}`);
+    const response = await fetch(`http://localhost:5000/api/spells/${name}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Error while sending request");
@@ -177,11 +183,9 @@ export const finduserSpelllist = async (setSpellState: (data: any) => void) => {
       },
     });
 
-    /*
     if (!response.ok) {
-      throw new Error("Error while sending request");
+      return null;
     }
-      */
 
     const spell = await response.json();
 
@@ -227,4 +231,26 @@ export const adduserspelllist = async (SpellState: any, method: string) => {
 		return false;
 	}
  */
+};
+
+export const findBatchSpell = async (names: string[]) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/spells/batch`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ names }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error while sending request");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };

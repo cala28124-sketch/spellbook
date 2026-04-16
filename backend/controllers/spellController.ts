@@ -12,7 +12,10 @@ const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
     //const Spell = await SpellModel.find({})
     //const spell = await SpellModel.findById(req.params.id);
     const name = req.params.identify as string;
-    const spell = await SpellModel.findOne({name: name, user: {$exists: false}});
+    const spell = await SpellModel.findOne({ name: name, $or: [
+    { user: { $exists: false } },
+    { user: req.user?.id }
+  ]});
 
     if(!spell){
         res.status(404);
@@ -21,6 +24,7 @@ const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
 
     res.status(200).json(spell);
 })
+
 
 // @desc Set goals
 // @route POST /api/events
@@ -128,6 +132,26 @@ const GetAllSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     res.status(200).json(spells);
 })
 
+const GetBatchSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+    //const Spell = await SpellModel.find({ user: req.user?.id });
+    //const Spell = await SpellModel.find({})
+    //const spell = await SpellModel.findById(req.params.id);
+
+    const { names } = req.body;
+
+    const spell = await SpellModel.find({ name: { $in: names}, $or: [
+    { user: { $exists: false } },
+    { user: req.user?.id }
+  ]});
+
+    if(!spell){
+        res.status(404);
+        throw new Error("Spell Not Found");
+    }
+
+    res.status(200).json(spell);
+})
+
 // @desc Update goals
 // @route PUT /api/events/:id
 // @access Private
@@ -203,4 +227,4 @@ const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
 
 
 
-export { GetSpells, SetSpells, UpdateSpells, DeleteSpells, GetPrivspell, SetPrivSpell, GetAllSpells };
+export { GetSpells, SetSpells, UpdateSpells, DeleteSpells, GetPrivspell, SetPrivSpell, GetAllSpells, GetBatchSpells };

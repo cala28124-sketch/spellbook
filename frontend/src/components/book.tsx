@@ -8,6 +8,7 @@ import {
   GetAllSpells,
   finduserSpelllist,
   adduserspelllist,
+  findBatchSpell,
 } from "./functions/fetchfunctions";
 import Popup from "./popup";
 import UpdatePopup from "./updatepopup";
@@ -30,7 +31,7 @@ function Book() {
   const [usersspell, setusersspell] = useState<SpellList>({
     user: "",
     spells: ["Mana Bolt", "Prestidigitation", "Wizard License"],
-    customdescription: [""],
+    customdescription: ["", "", ""],
   });
 
   // filter based on search
@@ -83,11 +84,29 @@ function Book() {
 
   const fetchSpells = async () => {
     const result = await finduserSpelllist(setusersspell);
-
     if (result == null) {
       console.log("no spell list found, creating");
       await adduserspelllist(usersspell, "POST");
+      return;
+    } else {
+      if (result.spells && result.spells.length > 3) {
+        const spellretrieve = await findBatchSpell(result.spells.slice(3));
+        setspelldata([...spelldata, ...spellretrieve]);
+      }
     }
+  };
+
+  const updateSpelllist = async (name: string, description?: string) => {
+    const updatedata = {
+      ...usersspell,
+      spells: [...usersspell.spells, name],
+      customdescription: [...usersspell.customdescription, ""],
+    };
+
+    setusersspell(updatedata);
+
+    await adduserspelllist(updatedata, "PUT");
+    return;
   };
 
   /*
@@ -99,6 +118,8 @@ function Book() {
   useEffect(() => {
     GetAllSpells(setpublicspelllist);
     fetchSpells();
+
+    /*
     const savedspells = localStorage.getItem("savedspells")
       ? JSON.parse(localStorage.getItem("savedspells") as string)
       : [];
@@ -106,6 +127,7 @@ function Book() {
     savedspells.splice(0, 3); // Remove the first 3 default spells to avoid duplication
 
     setspelldata([...spelldata, ...savedspells]);
+    */
 
     //setspelldata(savedspells ? JSON.parse(savedspells) : []);
   }, []);
@@ -134,7 +156,10 @@ function Book() {
 
     setspelldata([...spelldata, spellfetch]);
 
+    updateSpelllist(spellfetch.name);
+    /*
     localStorage.setItem("savedspells", JSON.stringify(savedspells));
+    */
 
     setspellfetch({
       name: "",
