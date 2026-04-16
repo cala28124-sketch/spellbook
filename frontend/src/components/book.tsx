@@ -8,23 +8,21 @@ import {
   GetAllSpells,
 } from "./functions/fetchfunctions";
 import Popup from "./popup";
+import UpdatePopup from "./updatepopup";
+import { Spell } from "../types";
 
 function Book() {
   const Spellbook = useRef<any>(null);
   const [search, setsearch] = useState("");
+  const [activeupdatepop, setactiveupdatepop] = useState<number | undefined>(
+    undefined,
+  );
   const [popup, setpopup] = useState(false);
   const [popup2, setpopup2] = useState(false);
   const [popup3, setpopup3] = useState(false);
+  const [popup4, setpopup4] = useState(false);
 
-  const [spelllist, setspelllist] = useState<
-    {
-      user: string;
-      name: string;
-      Components: string[];
-      SchoolSpell: string;
-      Description: string;
-    }[]
-  >([]);
+  const [spelllist, setspelllist] = useState<Spell[]>([]);
 
   const [searchlist, setsearchlist] = useState("");
 
@@ -308,6 +306,12 @@ function Book() {
         >
           spell list
         </button>
+        <button
+          className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100"
+          onClick={() => setpopup4(true)}
+        >
+          book list
+        </button>
       </div>
 
       <Popup
@@ -428,54 +432,56 @@ function Book() {
           </>
         }
       />
+      <Popup
+        popup={popup4}
+        setpopup={setpopup4}
+        internal={
+          <>
+            <input
+              className="absolute top-2 right-2 w-[85%] h-10 pl-1 bg-gray-200 rounded-xs"
+              type="text"
+              name="name"
+              value={searchlist}
+              onChange={(e) => setsearchlist(e.target.value)}
+              placeholder="spell name"
+            ></input>
+            <div className="flex flex-col items-center justify-center gap-4">
+              {spelldata.map((spell, index) => (
+                <>
+                  <div className="flex flex-col justify-center items-center text-lg bg-amber-500 p-4 w-full h-full border-5 border-amber-300">
+                    <p key={index}>{spell.name}</p>
+                    <button
+                      onClick={() => {
+                        deletespell(index);
+                      }}
+                      className={`${index == 0 || index == 1 || index == 2 ? `hidden` : ``} bg-amber-500 border-5 border-amber-500 p-3 hover:border-amber-300 hover:bg-amber-600 transition duration-100`}
+                    >
+                      remove
+                    </button>
+                    <button
+                      onClick={() => {
+                        setactiveupdatepop(index);
+                      }}
+                      className={`bg-amber-500 border-5 border-amber-500 p-3 hover:border-amber-300 hover:bg-amber-600 transition duration-100`}
+                    >
+                      update
+                    </button>
+                    <UpdatePopup
+                      popup={activeupdatepop}
+                      setpopup={setactiveupdatepop}
+                      index={index}
+                      spell={spelldata}
+                      setspell={setspelldata}
+                    />
+                  </div>
+                </>
+              ))}
+            </div>
+          </>
+        }
+      />
     </>
   );
 }
 
 export default Book;
-
-/*
-       
-<div className="flex items-center justify-center min-h-screen">
-        <HTMLFlipBook width={300} height={500} {...({} as any)}>
-          <div className="demoPage">Page 1</div>
-          <div className="demoPage">Page 2</div>
-          <div className="demoPage">Page 3</div>
-          <div className="demoPage">Page 4</div>
-        </HTMLFlipBook>
-      </div>
-
-      */
-
-/*
-
-
-       {spellData.map((pokemon) => (
-          <div className="page" key={pokemon.id}>
-            <div className="page-content">
-              <div className="pokemon-container">
-                <img
-                  src={`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${pokemon.id}.png`}
-                  alt={pokemon.name}
-                />
-                <div className="pokemon-info">
-                  <h2 className="pokemon-name">{pokemon.name}</h2>
-                  <p className="pokemon-number">#{pokemon.id}</p>
-                  <div>
-                    {pokemon.types.map((type) => (
-                      <span
-                        key={type}
-                        className={`pokemon-type type-${type.toLowerCase()}`}
-                      >
-                        {type}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="pokemon-description">{pokemon.description}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-       */
