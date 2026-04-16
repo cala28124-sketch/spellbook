@@ -6,10 +6,12 @@ import {
   findSpellbyIdprivate,
   addspelldatapriv,
   GetAllSpells,
+  finduserSpelllist,
+  adduserspelllist,
 } from "./functions/fetchfunctions";
 import Popup from "./popup";
 import UpdatePopup from "./updatepopup";
-import { Spell } from "../types";
+import { Spell, SpellList } from "../types";
 
 function Book() {
   const Spellbook = useRef<any>(null);
@@ -22,12 +24,17 @@ function Book() {
   const [popup3, setpopup3] = useState(false);
   const [popup4, setpopup4] = useState(false);
 
-  const [spelllist, setspelllist] = useState<Spell[]>([]);
+  const [publicspelllist, setpublicspelllist] = useState<Spell[]>([]);
 
   const [searchlist, setsearchlist] = useState("");
+  const [usersspell, setusersspell] = useState<SpellList>({
+    user: "",
+    spells: ["Mana Bolt", "Prestidigitation", "Wizard License"],
+    customdescription: [""],
+  });
 
   // filter based on search
-  const filteredspells = spelllist.filter((spell) =>
+  const filteredspells = publicspelllist.filter((spell) =>
     spell.name.toLowerCase().includes(searchlist.toLowerCase()),
   );
 
@@ -74,11 +81,24 @@ function Book() {
     },
   ]);
 
-  useEffect(() => {
-    GetAllSpells(setspelllist);
+  const fetchSpells = async () => {
+    const result = await finduserSpelllist(setusersspell);
+
+    if (result == null) {
+      console.log("no spell list found, creating");
+      await adduserspelllist(usersspell, "POST");
+    }
+  };
+
+  /*
+  useEffect (() => {
+    GetAllSpells(setpublicspelllist);
   }, []);
+  */
 
   useEffect(() => {
+    GetAllSpells(setpublicspelllist);
+    fetchSpells();
     const savedspells = localStorage.getItem("savedspells")
       ? JSON.parse(localStorage.getItem("savedspells") as string)
       : [];

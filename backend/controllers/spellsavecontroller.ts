@@ -2,72 +2,72 @@ import { type Request, type Response, type RequestHandler } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import SpellSaveModel from '../model/SpellSaveModel.js';
 import usermodel from '../model/usermodel.js';
+import { error } from 'node:console';
 
 // @desc Get spell
 // @route GET /api/
 // @access public
-const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
-    //const Spell = await SpellModel.find({ user: req.user?.id });
-    //const Spell = await SpellModel.find({})
-    //const spell = await SpellModel.findById(req.params.id);
-    const name = req.params.identify as string;
-    const spell = await SpellSaveModel.findOne({name: name, user: {$exists: false}});
+const GetSpellList: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+    const userID = req.user?.id;
+    const spell = await SpellSaveModel.findOne({ user: userID});
 
     if(!spell){
-        res.status(404);
-        throw new Error("Spell Not Found");
+        res.status(200).json(null);
+        return;
     }
 
     res.status(200).json(spell);
+    console.log("spell got");
 })
 
 // @desc Set goals
 // @route POST /api/events
 // @access Private
-const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+const SetSpellList: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
 
-    const { name, Components, SchoolSpell, Description } = req.body;
-
-
-    if(!req.body?.name) { 
+    if(!req.body?.spells) { 
         res.status(400)
-        throw new Error('Please add a spell name');
-    }else if(!req.body?.Components) { 
+        throw new Error('Please add spells');
+    }else if(!req.body?.customdescription) { 
         res.status(400)
-        throw new Error('Please add atleast one component, or none');
-    } else if(!req.body?.SchoolSpell) { 
-        res.status(400)
-        throw new Error('Please add a school name');
-    }else if(!req.body?.Description) { 
-        res.status(400)
-        throw new Error('Please add a description');
+        throw new Error('Please add a custom description');
     }
 
     const Spell = await SpellSaveModel.create({
-        
-        //user: req.user?.id,
+        user: req.user.id,
+        spells: req.body.spells,
+        customdescription: req.body.customdescription,
     })
     
     res.status(200).json(Spell);
+    console.log("spell sent");
 })
 
 // @desc Update goals
 // @route PUT /api/events/:id
 // @access Private
-const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
+const UpdateSpellList: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
 
-    const Spell = await SpellSaveModel.findById(req.params.identify);
+    // first checks for user
+    const user = await usermodel.findById(req.user?.id);
 
-    if(!Spell) {
-        res.status(400)
-        throw new Error('Spell not found');
+    //check for user
+    if(!user) {
+        res.status(401)
+        throw new Error('User not found');
     }
+        
 
-    const updatedSpell = await SpellSaveModel.findByIdAndUpdate(req.params.identify, req.body, {new: true})
+    const updatedSpell = await SpellSaveModel.findOneAndUpdate({user: req.user?.id}, req.body, {new: true});
+
+    if(!updatedSpell){
+        res.status(404);
+        throw new Error('Spell list not found');
+    }
 
 
      res.status(200).json(updatedSpell);
 })
 
 
-export { GetSpells, SetSpells, UpdateSpells };
+export { GetSpellList, SetSpellList, UpdateSpellList };

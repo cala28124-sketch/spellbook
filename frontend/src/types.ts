@@ -5,3 +5,9 @@ export interface Spell {
   SchoolSpell: string;
   Description: string;
 }
+
+export interface SpellList {
+  user: string;
+  spells: string[];
+  customdescription: string[];
+}

@@ -8,12 +8,12 @@ const spellsaveSchema = new mongoose.Schema({
     spells: {
         type: [String],
         required: [true, 'Please add a text value'], 
-        index: [true],
+        index: true,
     },
     customdescription: {
-        type: String,
+        type: [String],
         required: [true, 'Please add a text value'], 
-        index: [true],
+        index: true,
     },
 }, {
     timestamps: true
