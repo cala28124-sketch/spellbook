@@ -27,6 +27,8 @@ function Book() {
 
   const [publicspelllist, setpublicspelllist] = useState<Spell[]>([]);
 
+  const hasFetched = useRef(false);
+
   const [searchlist, setsearchlist] = useState("");
   const [usersspell, setusersspell] = useState<SpellList>({
     user: "",
@@ -83,6 +85,11 @@ function Book() {
   ]);
 
   const fetchSpells = async () => {
+    if (hasFetched.current == true) {
+      return;
+    }
+    hasFetched.current = true;
+
     const result = await finduserSpelllist(setusersspell);
     if (result == null) {
       console.log("no spell list found, creating");
@@ -91,22 +98,46 @@ function Book() {
     } else {
       if (result.spells && result.spells.length > 3) {
         const spellretrieve = await findBatchSpell(result.spells.slice(3));
-        setspelldata([...spelldata, ...spellretrieve]);
+        setspelldata((prev) => [...prev, ...spellretrieve]);
       }
     }
   };
 
-  const updateSpelllist = async (name: string, description?: string) => {
-    const updatedata = {
-      ...usersspell,
-      spells: [...usersspell.spells, name],
-      customdescription: [...usersspell.customdescription, ""],
-    };
+  const updateSpelllist = async (
+    name: string,
+    remove: boolean,
+    description?: string,
+  ) => {
+    const latest = await finduserSpelllist(setusersspell);
+    if (!remove) {
+      //adding
 
-    setusersspell(updatedata);
+      const updatedata = {
+        ...latest,
+        spells: [...latest.spells, name],
+        customdescription: [...latest.customdescription, ""],
+      };
 
-    await adduserspelllist(updatedata, "PUT");
-    return;
+      setusersspell(updatedata);
+
+      await adduserspelllist(updatedata, "PUT");
+      return;
+    } else {
+      //removing
+      const index = latest.spells.indexOf(name);
+      const updatedata = {
+        ...latest,
+        spells: latest.spells.filter((spell: string) => spell != name),
+        customdescription: latest.customdescription.filter(
+          (desc: string, i: number) => i != index,
+        ),
+      };
+
+      setusersspell(updatedata);
+
+      await adduserspelllist(updatedata, "PUT");
+      return;
+    }
   };
 
   /*
@@ -156,7 +187,7 @@ function Book() {
 
     setspelldata([...spelldata, spellfetch]);
 
-    updateSpelllist(spellfetch.name);
+    updateSpelllist(spellfetch.name, false);
     /*
     localStorage.setItem("savedspells", JSON.stringify(savedspells));
     */
@@ -179,9 +210,23 @@ function Book() {
   const addspell = () => {
     const savedspells = [...spelldata, spellnew];
 
+    const name = spellnew.name as string;
+
+    spellnew.name = name
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
+      .join(" ");
+
     setspelldata([...spelldata, spellnew]);
 
+    updateSpelllist(spellnew.name, false);
+
+    sendfarawayspell();
+
+    /*
     localStorage.setItem("savedspells", JSON.stringify(savedspells));
+    */
 
     setspellnew({
       name: "",
@@ -199,10 +244,14 @@ function Book() {
   };
 
   const deletespell = (index: number) => {
+    const name = spelldata[index].name;
     const updatedspells = [...spelldata];
     updatedspells.splice(index, 1);
     setspelldata(updatedspells);
+    /*
     localStorage.setItem("savedspells", JSON.stringify(updatedspells));
+    */
+    updateSpelllist(name, true);
 
     setTimeout(() => {
       if (Spellbook.current) {
@@ -249,7 +298,7 @@ function Book() {
       .map((name) => name.charAt(0).toUpperCase() + name.slice(1))
       .join(" ");
 
-    const response = await addspelldata(spellnew);
+    const response = await addspelldatapriv(spellnew);
     if (!response) {
       throw new Error("Error sending spell");
     }
@@ -336,6 +385,7 @@ function Book() {
         <button
           className="w-[100px] h-[100px] bg-orange-800 border-5 border-yellow-100 hover:border-yellow-500 hover:scale-110 transition duration-100"
           onClick={() => setpopup(true)}
+          // farawayspell
         >
           add spell
         </button>
@@ -428,9 +478,11 @@ function Book() {
                 onChange={handleChange}
                 placeholder="Description"
               />
+
               <button
                 onClick={addspell}
                 className="bg-gray-200 h-10 hover:scale-110 "
+                //send/add spell to book directly
               >
                 Insert Spell
               </button>
