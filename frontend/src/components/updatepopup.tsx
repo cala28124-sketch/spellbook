@@ -1,6 +1,10 @@
 import React from "react";
 import { useState, type FC } from "react";
-import { Spell } from "../types";
+import { Spell, SpellList } from "../types";
+import {
+  finduserSpelllist,
+  adduserspelllist,
+} from "./functions/fetchfunctions";
 
 interface props {
   popup: number | undefined;
@@ -8,6 +12,9 @@ interface props {
   index: number;
   spell: Spell[];
   setspell: (arg0: Spell[]) => void;
+  description: string;
+  setdescription: (arg0: string) => void;
+  setusersspell: (arg0: SpellList) => void;
 }
 
 const UpdatePopup: FC<props> = ({
@@ -16,8 +23,11 @@ const UpdatePopup: FC<props> = ({
   spell,
   index,
   setspell,
+  description,
+  setdescription,
+  setusersspell,
 }: props) => {
-  const [description, setdescription] = useState("");
+  //const [description, setdescription] = useState("");
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -27,7 +37,22 @@ const UpdatePopup: FC<props> = ({
       [name]: value,
     };
 
+    setdescription(e.target.value);
     setspell(updatedspell);
+  };
+
+  const updateDescription = async (name: string, description: string) => {
+    const latest = await finduserSpelllist(setusersspell);
+    const index = latest.spells.indexOf(name);
+
+    if (index === -1) return; // spell not found
+
+    const updatedDescriptions = [...latest.customdescription];
+    updatedDescriptions[index] = description;
+
+    const updatedata = { ...latest, customdescription: updatedDescriptions };
+    setusersspell(updatedata);
+    await adduserspelllist(updatedata, "PUT");
   };
 
   return (
@@ -57,8 +82,11 @@ const UpdatePopup: FC<props> = ({
               onChange={handleChange}
               placeholder="Spell Description"
             />
-            <button className="bg-gray-200 h-10 hover:scale-110 ">
-              Update Spell
+            <button
+              onClick={() => updateDescription(spell[index].name, description)}
+              className="bg-gray-200 h-10 hover:scale-110 "
+            >
+              Save Spell Update
             </button>
           </div>
         </div>

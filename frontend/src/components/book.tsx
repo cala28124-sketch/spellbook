@@ -30,11 +30,13 @@ function Book() {
   const hasFetched = useRef(false);
 
   const [searchlist, setsearchlist] = useState("");
+  // imported values
   const [usersspell, setusersspell] = useState<SpellList>({
     user: "",
     spells: ["Mana Bolt", "Prestidigitation", "Wizard License"],
     customdescription: ["", "", ""],
   });
+  const [customdescript, setcustomdescript] = useState("");
 
   // filter based on search
   const filteredspells = publicspelllist.filter((spell) =>
@@ -104,8 +106,8 @@ function Book() {
   };
 
   const updateSpelllist = async (
-    name: string,
     remove: boolean,
+    name: string,
     description?: string,
   ) => {
     const latest = await finduserSpelllist(setusersspell);
@@ -115,7 +117,7 @@ function Book() {
       const updatedata = {
         ...latest,
         spells: [...latest.spells, name],
-        customdescription: [...latest.customdescription, ""],
+        customdescription: [...latest.customdescription, description],
       };
 
       setusersspell(updatedata);
@@ -187,7 +189,7 @@ function Book() {
 
     setspelldata([...spelldata, spellfetch]);
 
-    updateSpelllist(spellfetch.name, false);
+    updateSpelllist(false, spellfetch.name);
     /*
     localStorage.setItem("savedspells", JSON.stringify(savedspells));
     */
@@ -220,7 +222,7 @@ function Book() {
 
     setspelldata([...spelldata, spellnew]);
 
-    updateSpelllist(spellnew.name, false);
+    updateSpelllist(false, spellnew.name);
 
     sendfarawayspell();
 
@@ -251,7 +253,7 @@ function Book() {
     /*
     localStorage.setItem("savedspells", JSON.stringify(updatedspells));
     */
-    updateSpelllist(name, true);
+    updateSpelllist(true, name);
 
     setTimeout(() => {
       if (Spellbook.current) {
@@ -365,13 +367,15 @@ function Book() {
               </div>
 
               <p className="text-lg text-center w-full leading-relaxed">
-                {spell.Description}
+                {usersspell.customdescription[index] !== ""
+                  ? usersspell.customdescription[index]
+                  : spell.Description}
               </p>
               <button
-                onClick={() => deletespell(index)}
+                //onClick={() => deletespell(index)}
                 className="bg-gray-200 h-10 hover:scale-110 "
               >
-                Delete Spell
+                (old, doesnt do anything now)Delete Spell
               </button>
             </div>
           </div>
@@ -569,6 +573,9 @@ function Book() {
                       index={index}
                       spell={spelldata}
                       setspell={setspelldata}
+                      description={customdescript}
+                      setdescription={setcustomdescript}
+                      setusersspell={setusersspell}
                     />
                   </div>
                 </>
