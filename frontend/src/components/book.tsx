@@ -340,11 +340,11 @@ function Book() {
         </div>
 
         <div className="bg-[url('/parchment.png')] bg-cover bg-center w-[370px] h-[500px] z-0">
-          <div className="w-full h-full flex flex-col items-center justify-center flex-wrap">
+          <div className="w-full h-full flex flex-col items-center justify-center flex-wrap gap-5">
             {spelldata.map((spell, index) => (
               <button
                 onClick={() => flipspell(index + 2)}
-                className="bg-gray-200 h-10 hover:scale-110 "
+                className="h-10 hover:scale-110 border-5 border-yellow-800 transition duration-100"
               >
                 {spell.name}
               </button>
@@ -518,14 +518,16 @@ function Book() {
                 <>
                   <div className="flex flex-col justify-center items-center text-lg bg-amber-500 p-4 w-full h-full border-5 border-amber-300">
                     <p key={index}>{spell.name}</p>
-                    <button
-                      onClick={() =>
-                        farawayspell(spell.name, spell.user ? true : false)
-                      }
-                      className="bg-amber-500 border-5 border-amber-500 p-3 hover:border-amber-300 hover:bg-amber-600 transition duration-100"
-                    >
-                      add
-                    </button>
+                    {!usersspell.spells.includes(spell.name) ? (
+                      <button
+                        onClick={() =>
+                          farawayspell(spell.name, spell.user ? true : false)
+                        }
+                        className="bg-amber-500 border-5 border-amber-500 p-3 hover:border-amber-300 hover:bg-amber-600 transition duration-100"
+                      >
+                        add
+                      </button>
+                    ) : null}
                   </div>
                 </>
               ))}
