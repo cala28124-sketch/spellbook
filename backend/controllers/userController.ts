@@ -75,8 +75,9 @@ const loginUser: RequestHandler = expressAsyncHandler (async (req: Request, res:
 
         res.cookie('token', token, {
             httpOnly: true, // This makes the cookie inaccessible to JavaScript on the client side
-            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-            sameSite: 'strict', // Prevents the cookie from being sent with cross-site requests
+            secure: true,
+            //secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            sameSite: 'none', // Prevents the cookie from being sent with cross-site requests
             maxAge: 30 * 24 * 60 * 60 * 1000, // Cookie expires in 30 days
         });
 
