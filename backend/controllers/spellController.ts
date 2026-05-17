@@ -23,6 +23,7 @@ const GetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
     }
 
     res.status(200).json(spell);
+    return;
 })
 
 
@@ -57,6 +58,7 @@ const SetSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: 
     })
     
     res.status(200).json(Spell);
+    return;
 })
 
 // @desc Get private spells
@@ -81,6 +83,7 @@ const GetPrivspell = expressAsyncHandler(async (req: Request, res: Response) => 
     }
 
      res.status(200).json(spells);
+     return;
 })
 
 // @desc Set private spells
@@ -110,6 +113,7 @@ const SetPrivSpell = expressAsyncHandler(async (req: Request, res: Response) => 
     })
     
     res.status(200).json(Event);
+    return;
 })
 
 // @desc Get spell
@@ -130,6 +134,7 @@ const GetAllSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     }
 
     res.status(200).json(spells);
+    return;
 })
 
 const GetBatchSpells: RequestHandler = expressAsyncHandler(async (req: Request, res: Response) => {
@@ -150,6 +155,7 @@ const GetBatchSpells: RequestHandler = expressAsyncHandler(async (req: Request, 
     }
 
     res.status(200).json(spell);
+    return;
 })
 
 // @desc Update goals
@@ -188,6 +194,7 @@ const UpdateSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
 
 
      res.status(200).json(updatedSpell);
+     return;
 })
 
 // @desc Delete goals
@@ -223,6 +230,7 @@ const DeleteSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     await Spell.deleteOne();
 
     res.status(200).json({id: req.params.identify});
+    return;
 })
 
 
