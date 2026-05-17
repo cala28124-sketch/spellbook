@@ -12,7 +12,7 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
 
-const allowedOrigins = ['http://localhost:1420', 'https://tauri.localhost'];
+const allowedOrigins = ['http://localhost:1420', 'https://tauri.localhost', 'tauri://localhost'];
 
 app.use(cors({
   origin: (origin, callback) => {
