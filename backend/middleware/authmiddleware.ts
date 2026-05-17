@@ -17,6 +17,20 @@ const protect: RequestHandler= expressAsyncHandler (async (req: Request, res: Re
     token = req.cookies.token;
 
     if(token) {
+    try{
+        console.log("Token received:", token.substring(0, 20)) // just first 20 chars
+        console.log("Secret being used:", process.env.JWT_SECRET)
+        const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET as string) as jsonwebtoken.JwtPayload;
+        req.user = await userModel.findById(decoded.id).select('-password');
+        next();
+    } catch (error) {
+        console.error("JWT Error:", error) // this will show exactly why it failed
+        res.status(401);
+        throw new Error('Not authorized, token failed');
+    }
+}
+
+    if(token) {
         try{
             const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET as string) as jsonwebtoken.JwtPayload;
             req.user = await userModel.findById(decoded.id).select('-password');
