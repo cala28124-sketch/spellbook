@@ -1,9 +1,13 @@
+const BASE_URL = "https://backend-production-90c6.up.railway.app";
+// use ${BASE_URL} in fetch calls instead of hardcoding the URL
+//old url http://localhost:5000
+
 export const findSpellbyId = async (
   name: string,
   setSpellState: (data: any) => void,
 ) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/spells/${name}`, {
+    const response = await fetch(`${BASE_URL}/api/spells/${name}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -39,7 +43,7 @@ export const findSpellbyId = async (
 };
 
 export const addspelldata = async (SpellState: any) => {
-  const response = await fetch("http://localhost:5000/api/spells/", {
+  const response = await fetch(`${BASE_URL}/api/spells/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -81,7 +85,7 @@ export const findSpellbyIdprivate = async (
 ) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/api/spells/privatespell/${name}`,
+      `${BASE_URL}/api/spells/privatespell/${name}`,
       {
         method: "GET",
         credentials: "include",
@@ -112,17 +116,14 @@ export const findSpellbyIdprivate = async (
 };
 
 export const addspelldatapriv = async (SpellState: any) => {
-  const response = await fetch(
-    "http://localhost:5000/api/spells/privatespell",
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(SpellState),
+  const response = await fetch(`${BASE_URL}/api/spells/privatespell`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(SpellState),
+  });
 
   // const data = await send.json(); - this gets the data from the fetch request back
 
@@ -144,7 +145,7 @@ export const addspelldatapriv = async (SpellState: any) => {
 
 export const GetAllSpells = async (setSpellState: (data: any) => void) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/spells/`, {
+    const response = await fetch(`${BASE_URL}/api/spells/`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -175,7 +176,7 @@ export const GetAllSpells = async (setSpellState: (data: any) => void) => {
 
 export const finduserSpelllist = async (setSpellState: (data: any) => void) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/spells/spelllist`, {
+    const response = await fetch(`${BASE_URL}/api/spells/spelllist`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -206,7 +207,7 @@ export const finduserSpelllist = async (setSpellState: (data: any) => void) => {
 };
 
 export const adduserspelllist = async (SpellState: any, method: string) => {
-  const response = await fetch("http://localhost:5000/api/spells/spelllist", {
+  const response = await fetch(`${BASE_URL}/api/spells/spelllist`, {
     method: method,
     credentials: "include",
     headers: {
@@ -235,7 +236,7 @@ export const adduserspelllist = async (SpellState: any, method: string) => {
 
 export const findBatchSpell = async (names: string[]) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/spells/batch`, {
+    const response = await fetch(`${BASE_URL}/api/spells/batch`, {
       method: "POST",
       credentials: "include",
       headers: {

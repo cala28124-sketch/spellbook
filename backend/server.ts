@@ -12,9 +12,16 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
 
+const allowedOrigins = ['http://localhost:1420', 'https://tauri.localhost'];
 
 app.use(cors({
-  origin: 'http://localhost:1420', 
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }, 
   credentials: true,
 }));
 

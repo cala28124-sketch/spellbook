@@ -1,3 +1,7 @@
+const BASE_URL = "https://backend-production-90c6.up.railway.app";
+// use ${BASE_URL} in fetch calls instead of hardcoding the URL
+//old url http://localhost:5000
+
 const createAccount = async (
   email: string,
   username: string,
@@ -10,7 +14,7 @@ const createAccount = async (
       password: password,
     };
 
-    const response = await fetch("http://localhost:5000/api/users", {
+    const response = await fetch(`${BASE_URL}/api/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +42,7 @@ export async function login(email: string, password: string) {
   };
 
   try {
-    const response = await fetch("http://localhost:5000/api/users/login", {
+    const response = await fetch(`${BASE_URL}/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +66,7 @@ export async function login(email: string, password: string) {
 
 export async function verifyToken() {
   try {
-    const response = await fetch("http://localhost:5000/api/users/me", {
+    const response = await fetch(`${BASE_URL}/api/users/me`, {
       method: "GET",
       credentials: "include",
     });
