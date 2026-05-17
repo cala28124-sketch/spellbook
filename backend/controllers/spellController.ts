@@ -128,7 +128,7 @@ const GetAllSpells: RequestHandler = expressAsyncHandler(async (req: Request, re
     { user: req.user?.id }
   ]});
 
-    if(!spells){
+    if(!spells || spells.length === 0){
         res.status(404);
         throw new Error("Spell Not Found");
     }
@@ -149,7 +149,7 @@ const GetBatchSpells: RequestHandler = expressAsyncHandler(async (req: Request, 
     { user: req.user?.id }
   ]});
 
-    if(!spell){
+    if(!spell || spell.length === 0 ){
         res.status(404);
         throw new Error("Spell Not Found");
     }
