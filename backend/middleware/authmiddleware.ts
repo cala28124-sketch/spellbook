@@ -18,7 +18,7 @@ const protect: RequestHandler= expressAsyncHandler (async (req: Request, res: Re
 
     if(token) {
         try{
-            const decoded = jsonwebtoken.verify(token, process.env.JWT_SECREt as string) as jsonwebtoken.JwtPayload;
+            const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET as string) as jsonwebtoken.JwtPayload;
             req.user = await userModel.findById(decoded.id).select('-password');
             next();
             // next just makes it continue and call the next middleware
